@@ -1,4 +1,3 @@
-
 using System;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.SignalR;
@@ -46,6 +45,7 @@ namespace webApi.DataAccess
             }
 
             if (_pubSubServer != null) {
+                _pubSubServer.Stop();
                 _pubSubServer.Dispose();
                 _pubSubServer = null;
             }
