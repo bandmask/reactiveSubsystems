@@ -1,0 +1,41 @@
+version: "3"
+
+services:
+  webapi:
+    container_name: webapi
+    image: reactiveapp/webapi
+    build: ./webApi
+    ports:
+      - "8081:9000"
+    depends_on:
+      - redis
+    links:
+      - redis
+
+  web_server:
+    container_name: web_server
+    image: reactiveapp/webserver
+    build: ./web/server
+    ports:
+      - "8082:9000"
+    depends_on:
+      - redis
+    links:
+      - redis
+  
+  redis:
+    container_name: redis
+    image: redis:alpine
+    environment:
+      - appendonly=yes
+    volumes:
+      - /etc/reacive-subsystems/redis:/data
+
+networks: 
+  default:
+    external:
+      name: reactive-subsystems
+
+#volumes:
+#  /etc/reactive-subsystems/:/app/
+#alt  /etc/reactive-subsystems/webapi/:/app/
