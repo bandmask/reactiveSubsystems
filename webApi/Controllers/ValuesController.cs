@@ -11,45 +11,16 @@ namespace webApi.Controllers
     [ApiController]
     public class ValuesController : ControllerBase
     {
-        private readonly ICache _cache;
         private readonly SignalHub _signalHub;
 
-        public ValuesController(SignalHub signalHub, ICache cache)
+        public ValuesController(SignalHub signalHub)
         {
             _signalHub = signalHub;
-            _cache = cache;
         }
 
         [HttpGet("status")]
         public ActionResult Status() {
             return Ok( new { time = DateTime.Now });
-        }
-        
-        [HttpGet]
-        public ActionResult Get()
-        {
-            return Ok(_cache.GetAll());
-        }
-
-        [HttpPost("add")]
-        public void Add()
-        {
-            _cache.Add(new Model
-            {
-                Value = new Random().Next()
-            });
-        }
-
-        [HttpPost("remove/{id}")]
-        public void Remove(string id)
-        {
-            _cache.Remove(_cache.Get(id));
-        }
-
-        [HttpDelete("reset")]
-        public void Reset()
-        {
-            _cache.Reset();
         }
         
         [HttpGet("start")]

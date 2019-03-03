@@ -22,11 +22,8 @@ namespace webApi
         {
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
             
-            services.AddSingleton<ICache, Cache>();
             services.AddSingleton<IRedisClientsManager>(c => new RedisManagerPool("redis"));
             services.AddSingleton<ISignalHub, SignalHub>();
-
-            // services.AddSignalR();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -44,10 +41,6 @@ namespace webApi
 
             app.UseHttpsRedirection();
 
-            // app.UseSignalR(routes => {
-            //     routes.MapHub<SignalHub>("/signal");
-            // });
-            
             app.UseMvc();
         }
     }
