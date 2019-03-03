@@ -11,10 +11,8 @@ namespace webApi.DataAccess
         void Stop();
         void Send(string message);
     }
-    /* SignalHub
-     * SignalR.Hub not working at the moment
-     */
-    public class SignalHub : ISignalHub // Hub
+    
+    public class SignalHub : ISignalHub
     {
         private static IRedisClient _client;
         private static IRedisPubSubServer _pubSubServer;
@@ -55,13 +53,5 @@ namespace webApi.DataAccess
         {
             _client.PublishMessage("pong", message);
         }
-
-        /* Signal
-         * Clients is null.
-         */
-        // private async Task Signal(string v1, string v2) 
-        // {
-        //     await Clients.All.SendAsync("message", v1, v2);
-        // }
     }
 }
