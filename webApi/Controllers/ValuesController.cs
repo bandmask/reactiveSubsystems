@@ -11,9 +11,9 @@ namespace webApi.Controllers
     [ApiController]
     public class ValuesController : ControllerBase
     {
-        private readonly SignalHub _signalHub;
+        private readonly ISignalHub _signalHub;
 
-        public ValuesController(SignalHub signalHub)
+        public ValuesController(ISignalHub signalHub)
         {
             _signalHub = signalHub;
         }

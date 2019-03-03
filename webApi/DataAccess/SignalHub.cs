@@ -1,4 +1,6 @@
 using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.SignalR;
 using ServiceStack.Redis;
@@ -14,6 +16,7 @@ namespace webApi.DataAccess
     
     public class SignalHub : ISignalHub
     {
+        private static IList<string> _values;        
         private static IRedisClient _client;
         private static IRedisPubSubServer _pubSubServer;
         private readonly IRedisClientsManager _clientsManager;
@@ -23,21 +26,29 @@ namespace webApi.DataAccess
             _clientsManager = clientsManager;
         }
 
-        private Action<string, string> Log = (message, channel) => {
-            Console.WriteLine($"ping event recieved {channel} {message}");
+        private Action<string, string> RegisterResults = (result, channel) => {
+            _values.Add(result);
         };
 
-        public void Start()
-        {
-            _client = _clientsManager.GetClient();
-            _pubSubServer = _clientsManager.CreatePubSubServer("ping", Log).Start();
+        private static string GetResults() {
+            return $"Number of results: {_values.Count}. Latest: {_values.LastOrDefault()}";
+        }
 
-            Send("message");
+        public async void Start()
+        {
+            _values = new List<string>();
+            _client = _clientsManager.GetClient();
+            _pubSubServer = _clientsManager.CreatePubSubServer("results", RegisterResults).Start();
+            Send("awaiting results");
+            await Task.Delay(TimeSpan.FromSeconds(30));
+            Stop();
         }
 
         public void Stop()
         {
             if (_client != null) {
+                Send($"results are in {GetResults()}");
+
                 _client.Dispose();
                 _client = null;
             }
@@ -47,11 +58,13 @@ namespace webApi.DataAccess
                 _pubSubServer.Dispose();
                 _pubSubServer = null;
             }
+
+            _values = null;
         }
 
         public void Send(string message)
         {
-            _client.PublishMessage("pong", message);
+            _client.PublishMessage("challangers", message);
         }
     }
 }
