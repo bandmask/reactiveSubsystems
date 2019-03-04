@@ -3,9 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
-using webApi.DataAccess;
+using HostApi.DataAccess;
 
-namespace webApi.Controllers
+namespace HostApi.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
@@ -35,13 +35,6 @@ namespace webApi.Controllers
         {
             _signalHub.Stop();
             return Ok(new { message = "signal hub stopped" });
-        }
-
-        [HttpPost("send")]
-        public ActionResult Send([FromBody] string message)
-        {
-            _signalHub.Send(message);
-            return Ok(new { message = $"signal hub message sent {message}" });
         }
     }
 }

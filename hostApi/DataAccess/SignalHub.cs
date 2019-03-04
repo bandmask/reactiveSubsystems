@@ -5,17 +5,21 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.SignalR;
 using ServiceStack.Redis;
 
-namespace webApi.DataAccess
+namespace HostApi.DataAccess
 {
     public interface ISignalHub
     {
         void Start();
         void Stop();
-        void Send(string message);
+        void Send(string channel, string message);
     }
     
     public class SignalHub : ISignalHub
     {
+        private const string CHANNEL_START = "challangers:start";
+        private const string CHANNEL_END = "challangers:end";
+        private const string CHANNEL_RECIEVE = "challangers:result";
+
         private static IList<string> _values;        
         private static IRedisClient _client;
         private static IRedisPubSubServer _pubSubServer;
@@ -26,28 +30,31 @@ namespace webApi.DataAccess
             _clientsManager = clientsManager;
         }
 
-        private Action<string, string> RegisterResults = (result, channel) => {
+        private Action<string, string> RegisterResults = (channel, result) => {
             _values.Add(result);
         };
 
         private static string GetResults() {
-            return $"Number of results: {_values.Count}. Latest: {_values.LastOrDefault()}";
+            return $"Number of results: {_values.Count}. {String.Join(",", _values)}";
         }
 
         public async void Start()
         {
             _values = new List<string>();
             _client = _clientsManager.GetClient();
-            _pubSubServer = _clientsManager.CreatePubSubServer("results", RegisterResults).Start();
-            Send("awaiting results");
-            await Task.Delay(TimeSpan.FromSeconds(30));
+            Console.WriteLine($"starting up  {GetResults()}");
+            _pubSubServer = _clientsManager.CreatePubSubServer(CHANNEL_RECIEVE, RegisterResults).Start();
+            Send(CHANNEL_START, "now collecting results");
+            await Task.Delay(TimeSpan.FromSeconds(10));
             Stop();
         }
 
         public void Stop()
         {
             if (_client != null) {
-                Send($"results are in {GetResults()}");
+                var results = GetResults();
+                Console.WriteLine($"results: {results}");
+                Send(CHANNEL_END, $"results are in {results}");
 
                 _client.Dispose();
                 _client = null;
@@ -62,9 +69,9 @@ namespace webApi.DataAccess
             _values = null;
         }
 
-        public void Send(string message)
+        public void Send(string channel, string message)
         {
-            _client.PublishMessage("challangers", message);
+            _client.PublishMessage(channel, message);
         }
     }
 }

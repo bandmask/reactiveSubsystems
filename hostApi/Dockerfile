@@ -4,16 +4,16 @@ ENV ASPNETCORE_ENVIRONMENT "Production"
 
 FROM microsoft/dotnet:2.2-sdk AS build
 WORKDIR /src
-COPY ["webApi.csproj", "./"]
-RUN dotnet restore "./webApi.csproj"
+COPY ["HostApi.csproj", "./"]
+RUN dotnet restore "./HostApi.csproj"
 COPY . .
 WORKDIR "/src/."
-RUN dotnet build "webApi.csproj" -c Release -o /app
+RUN dotnet build "HostApi.csproj" -c Release -o /app
 
 FROM build AS publish
-RUN dotnet publish "webApi.csproj" -c Release -o /app
+RUN dotnet publish "HostApi.csproj" -c Release -o /app
 
 FROM base AS final
 WORKDIR /app
 COPY --from=publish /app .
-ENTRYPOINT ["dotnet", "webApi.dll", "--urls", "http://*:9000"]
+ENTRYPOINT ["dotnet", "HostApi.dll", "--urls", "http://*:9000"]
