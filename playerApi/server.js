@@ -1,12 +1,13 @@
+var NRP = require('node-redis-pubsub');
 var io = require('socket.io');
-var server = io.listen(3000);
 
+var port = 3000;
+
+var server = io.listen(port);
 server.origins('*:*');
 
-var NRP = require('node-redis-pubsub');
-
 server.on('connection', socket => {
-  console.log('user connected');
+  console.log('socket.io on connection');
   socket.emit('welcome', 'wilkommen');
 });
 
@@ -19,7 +20,7 @@ const getResult = index => Math.floor(Math.random() * index * 100).toString();
 var nrp = NRP(config);
 
 nrp.on('challangers:start', data => {
-  console.log('challange event recieved', data);
+  console.log('redis pub/sub challangers:start event recieved', data);
     
   Array.apply(null, { length: 3 }).forEach((e, i) => {
     setTimeout(() => {
@@ -31,7 +32,7 @@ nrp.on('challangers:start', data => {
 });
 
 nrp.on('challangers:end', data => {
-  console.log('result data recieved', data);
+  console.log('redis pub/sub challangers:end event recieved', data);
 });
 
-console.log('asdjand');
+console.log(`PlayerApi socket.io listening on port ${port}`);
