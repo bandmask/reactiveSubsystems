@@ -1,9 +1,7 @@
 FROM node:alpine
 
-COPY ./server.js ./
 COPY ./index.html ./
-COPY ./playerApp.js ./
-COPY ./socketElement.js ./
-COPY ./attributeElement.js ./
+COPY ./server.js ./
+COPY ./src ./src
 
 ENTRYPOINT [ "node", "server" ]
