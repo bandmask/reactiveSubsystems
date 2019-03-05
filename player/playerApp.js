@@ -4,8 +4,8 @@
     <div>
       <input type="text" class="input" />
       <button class="button">click me</button>
-      <my-element></my-element>
-      <my-second-element></my-second-element>
+      <socket-element></socket-element>
+      <attribute-element server-status="disconnected"></attribute-element>
     </div>
   `;
 
@@ -15,27 +15,28 @@
 
       this.attachShadow({mode: 'open'});
       this.shadowRoot.appendChild(template.content.cloneNode(true));
-
-      this.secondElement = this.shadowRoot.querySelector('my-second-element');
-      this.secondElement.addEventListener('mySecondElement:connected', event => {
-        console.log(`event registered ${JSON.stringify(event)}: ${JSON.stringify(event.detail)}`);
-      });
-
-      this.input = this.shadowRoot.querySelector('.input');
-      this.btn = this.shadowRoot.querySelector('.button');
-      
-      this.counter = 0;
-
-      this.btn.addEventListener('click', this.increment.bind(this));
-
-      this.getActiveGames();
     };
+
+    disconnectedCallback () {
+      this.btn.removeEventListener('click', this.increment);
+    }
+
+    connectedCallback () {
+      this.attributeElement = this.shadowRoot.querySelector('attribute-element');
+      this.attributeElement.addEventListener('attributeElement:connected', this.getServerStatus.bind(this));
+
+      this.counter = 0;
+      this.input = this.shadowRoot.querySelector('.input');
+
+      this.btn = this.shadowRoot.querySelector('.button');
+      this.btn.addEventListener('click', this.increment.bind(this));
+    }
 
     increment () {
       this.input.value = `counter: ${++this.counter}`;
     };
 
-    async getActiveGames () {
+    async getServerStatus () {
       let serverStatus = await fetch('http://localhost:8081/api/values/status', {
         method: 'GET',
         headers: {
@@ -43,7 +44,7 @@
         }
       }).then(response => response.json());
 
-      this.secondElement.setAttribute('some-attribute', JSON.stringify(serverStatus));
+      this.attributeElement.setAttribute('server-status', JSON.stringify(serverStatus));
     };
   };
 
