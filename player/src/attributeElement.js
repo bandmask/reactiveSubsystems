@@ -10,8 +10,16 @@
         height: 100px;
         border: 1px solid lightgray;
       }
+      
+      .attributeElement.disconnected {
+        color: red;
+      }
+      
+      .attributeElement.connected {
+        color: green;
+      }
     </style>
-    <div class="attributeElement">attribute element</div>
+    <div class="attributeElement disconnected">attribute element</div>
   `;
 
   class AttributeElement extends HTMLElement {
@@ -42,6 +50,11 @@
       this.serverStatus.innerHTML = `
         <pre>${value}</pre>
       `;
+
+      if (value !== 'disconnected') {
+        this.serverStatus.classList.remove('disconnected');
+        this.serverStatus.classList.add('connected');
+      }
     }
 
     getServerStatus () {
