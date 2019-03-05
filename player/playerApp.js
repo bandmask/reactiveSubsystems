@@ -1,44 +1,46 @@
 !(() => {
+  const template = document.createElement('template');
+  template.innerHTML = `
+    <input type="text" class="input" />
+    <button class="button">click me</button>
+    <my-element />
+  `;
+
   class playerApp extends HTMLElement {
     constructor () {
       super();
       console.log('hello world from myApp', this);
-      var shadowRoot = this.attachShadow({mode: 'open'});
-      console.log('shadow root', shadowRoot);
-      let input = document.createElement('input');
-      input.setAttribute('type', 'text');
-      shadowRoot.appendChild(input);
+      this.attachShadow({mode: 'open'});
 
-      let btn = document.createElement('button');
+      this.shadowRoot.appendChild(template.content.cloneNode(true));
+
+      this.input = this.shadowRoot.querySelector('.input');
+      this.btn = this.shadowRoot.querySelector('.button');
       
-      btn.addEventListener('click', event => {
-        let value = input.value;
-        console.log('sdgjh', input, value);
-      });
+      this.counter = 0;
 
-      btn.innerText = "click me";
-      shadowRoot.appendChild(btn);
+      this.btn.addEventListener('click', this.increment.bind(this));
 
-      var newElement = document.createElement('my-element');
-      shadowRoot.appendChild(newElement);
-      console.log(newElement);
-    }
+      this.getActiveGames();
+    };
+
+    increment () {
+      this.input.value = `counter: ${++this.counter}`;
+    };
+
+    async getActiveGames () {
+      let activeGames = await fetch('http://localhost:8081/api/values/status', {
+        method: 'GET',
+        headers: {
+          Accept: 'application/json'
+        }
+      }).then(response => response.json());
+
+      console.log(activeGames);
+    };
   };
+
   window.customElements.define('player-app', playerApp);
-
-  class myElement extends HTMLElement {
-    constructor () {
-      super();
-
-      var shadowRoot = this.attachShadow({mode: 'open'});
-      var div = document.createElement('div');
-      div.innerHTML = 'asdunsduasd';
-      shadowRoot.appendChild(div);
-
-      console.log('from inner child');
-    }
-  };
-  window.customElements.define('my-element', myElement);
 })();
 // module.exports = class myFront extends HTMLElement {
 // class myApp extends HTMLElement {
