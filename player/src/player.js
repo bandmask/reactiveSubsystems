@@ -5,6 +5,7 @@
       <h1 class="header"></h1>
       <input type="text" class="input" />
       <button class="button">click me</button>
+      <disconnected-player></disconnected-player>
       <socket-element></socket-element>
       <attribute-element server-status="disconnected"></attribute-element>
     </div>
@@ -19,12 +20,13 @@
     };
 
     disconnectedCallback () {
+      console.log('player disconnected', this.playerName);
       this.btn.removeEventListener('click', this.increment);
-    }
+    };
 
     connectedCallback () {
       this.header = this.shadowRoot.querySelector('.header');
-      this.header.innerHTML = `Ready ${this.getAttribute('player-id')}`;
+      this.header.innerHTML = `Ready ${this.playerName}`;
 
       this.attributeElement = this.shadowRoot.querySelector('attribute-element');
       this.attributeElement.addEventListener('attributeElement:connected', this.getServerStatus.bind(this));
@@ -34,7 +36,7 @@
 
       this.btn = this.shadowRoot.querySelector('.button');
       this.btn.addEventListener('click', this.increment.bind(this));
-    }
+    };
 
     increment () {
       this.input.value = `counter: ${++this.counter}`;
@@ -49,6 +51,10 @@
       }).then(response => response.json());
 
       this.attributeElement.setAttribute('server-status', JSON.stringify(serverStatus));
+    };
+
+    get playerName () {
+      return this.getAttribute('player-id');
     };
   };
 
