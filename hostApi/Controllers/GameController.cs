@@ -13,7 +13,6 @@ namespace HostApi.Controllers
         public GameController (ICache cache)
         {
             _cache = cache;
-
         }
 
         [HttpGet]
