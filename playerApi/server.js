@@ -6,9 +6,11 @@ var port = 3000;
 var server = io.listen(port);
 server.origins('*:*');
 
-server.on('connection', socket => {
+var namespacedSocket = server.of('/my-namespace');
+namespacedSocket.on('connection', socket => {
   console.log('socket.io on connection');
   socket.emit('welcome', 'wilkommen');
+  socket.emit('newEvent', 'some event');
 });
 
 var config = {

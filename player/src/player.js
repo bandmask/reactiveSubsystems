@@ -2,6 +2,7 @@
   const template = document.createElement('template');
   template.innerHTML = `
     <div>
+      <h1 class="header"></h1>
       <input type="text" class="input" />
       <button class="button">click me</button>
       <socket-element></socket-element>
@@ -9,7 +10,7 @@
     </div>
   `;
 
-  class playerApp extends HTMLElement {
+  class Player extends HTMLElement {
     constructor () {
       super();
 
@@ -22,6 +23,9 @@
     }
 
     connectedCallback () {
+      this.header = this.shadowRoot.querySelector('.header');
+      this.header.innerHTML = `Ready ${this.getAttribute('player-id')}`;
+
       this.attributeElement = this.shadowRoot.querySelector('attribute-element');
       this.attributeElement.addEventListener('attributeElement:connected', this.getServerStatus.bind(this));
 
@@ -48,5 +52,5 @@
     };
   };
 
-  window.customElements.define('player-app', playerApp);
+  window.customElements.define('custom-player', Player);
 })();

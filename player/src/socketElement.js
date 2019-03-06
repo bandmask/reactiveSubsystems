@@ -35,11 +35,16 @@
     };
 
     connect () {
-      this.socket = io("http://localhost:8082");
+      this.socket = io('http://localhost:8082/my-namespace');
       this.socket.on('welcome', event => {
+        console.log('welcome event', event);
         this.connectionStatus.innerHTML = 'connected to socket';
         this.connectionStatus.classList.remove('disconnected');
         this.connectionStatus.classList.add('connected');
+      });
+
+      this.socket.on('newEvent', event => {
+        console.log('new event recieved', event);
       });
     };
   };
