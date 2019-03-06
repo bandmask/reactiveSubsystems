@@ -13,25 +13,25 @@ namespace HostApi.Controllers
     {
         private readonly ISignalHub _signalHub;
 
-        public ValuesController(ISignalHub signalHub)
+        public ValuesController (ISignalHub signalHub)
         {
             _signalHub = signalHub;
         }
 
         [HttpGet("status")]
-        public ActionResult Status() {
+        public ActionResult Status () {
             return Ok( new { time = DateTime.Now });
         }
         
         [HttpGet("start")]
-        public ActionResult Start()
+        public ActionResult Start ()
         {
             _signalHub.Start();
             return Ok(new { message = "signal hub started" });
         }
         
         [HttpGet("stop")]
-        public ActionResult Stop()
+        public ActionResult Stop ()
         {
             _signalHub.Stop();
             return Ok(new { message = "signal hub stopped" });

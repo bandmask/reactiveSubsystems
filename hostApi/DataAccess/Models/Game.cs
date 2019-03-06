@@ -6,7 +6,7 @@ namespace HostApi.DataAccess.Models
     {
         public int Value { get; set; }
 
-        public Game() : base() 
+        public Game () : base() 
         {
             Type = typeof(Game).ToString();
         }

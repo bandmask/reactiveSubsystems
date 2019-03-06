@@ -8,7 +8,7 @@ namespace HostApi.DataAccess.Models
         public DateTime Created { get; private set; }
         public string Type { get; protected set; }    
 
-        public EntityBase()
+        public EntityBase ()
         {
             Id = Guid.NewGuid().ToString("N");
             Created = DateTime.Now;

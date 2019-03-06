@@ -10,7 +10,7 @@ namespace HostApi
 {
     public class Startup
     {
-        public Startup(IConfiguration configuration)
+        public Startup (IConfiguration configuration)
         {
             Configuration = configuration;
         }
@@ -18,7 +18,7 @@ namespace HostApi
         public IConfiguration Configuration { get; }
 
         // This method gets called by the runtime. Use this method to add services to the container.
-        public void ConfigureServices(IServiceCollection services)
+        public void ConfigureServices (IServiceCollection services)
         {
             services.AddCors(corsPolicy => corsPolicy.AddPolicy("allowAllPolicy",
                 builder => builder.SetIsOriginAllowedToAllowWildcardSubdomains()
@@ -35,7 +35,7 @@ namespace HostApi
             services.AddSingleton<ICache, Cache>();
         }
 
-        public void Configure(IApplicationBuilder app, IHostingEnvironment env)
+        public void Configure (IApplicationBuilder app, IHostingEnvironment env)
         {
             app.UseCors("allowAllPolicy");
             app.UseHttpsRedirection();

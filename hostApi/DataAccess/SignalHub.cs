@@ -9,9 +9,9 @@ namespace HostApi.DataAccess
 {
     public interface ISignalHub
     {
-        void Start();
-        void Stop();
-        void Send(string channel, string message);
+        void Start ();
+        void Stop ();
+        void Send (string channel, string message);
     }
     
     public class SignalHub : ISignalHub
@@ -25,7 +25,7 @@ namespace HostApi.DataAccess
         private static IRedisPubSubServer _pubSubServer;
         private readonly IRedisClientsManager _clientsManager;
 
-        public SignalHub(IRedisClientsManager clientsManager)
+        public SignalHub (IRedisClientsManager clientsManager)
         {
             _clientsManager = clientsManager;
         }
@@ -34,11 +34,11 @@ namespace HostApi.DataAccess
             _values.Add(result);
         };
 
-        private static string GetResults() {
+        private static string GetResults () {
             return $"Number of results: {_values.Count}. {String.Join(",", _values)}";
         }
 
-        public async void Start()
+        public async void Start ()
         {
             _values = new List<string>();
             _client = _clientsManager.GetClient();
@@ -49,7 +49,7 @@ namespace HostApi.DataAccess
             Stop();
         }
 
-        public void Stop()
+        public void Stop ()
         {
             if (_client != null) {
                 var results = GetResults();
@@ -69,7 +69,7 @@ namespace HostApi.DataAccess
             _values = null;
         }
 
-        public void Send(string channel, string message)
+        public void Send (string channel, string message)
         {
             _client.PublishMessage(channel, message);
         }
