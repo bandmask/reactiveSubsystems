@@ -7,8 +7,8 @@ using HostApi.DataAccess;
 
 namespace HostApi.Controllers
 {
-    [Route("api/[controller]")]
     [ApiController]
+    [Route("api/[controller]")]
     public class ValuesController : ControllerBase
     {
         private readonly ISignalHub _signalHub;

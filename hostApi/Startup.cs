@@ -32,6 +32,7 @@ namespace HostApi
             
             services.AddSingleton<IRedisClientsManager>(c => new RedisManagerPool("redis"));
             services.AddSingleton<ISignalHub, SignalHub>();
+            services.AddSingleton<ICache, Cache>();
         }
 
         public void Configure(IApplicationBuilder app, IHostingEnvironment env)
