@@ -6,11 +6,13 @@ var port = 3000;
 var server = io.listen(port);
 server.origins('*:*');
 
+var s
+
 var namespacedSocket = server.of('/my-namespace');
 namespacedSocket.on('connection', socket => {
   console.log('socket.io on connection');
   socket.emit('welcome', 'wilkommen');
-  socket.emit('newEvent', 'some event');
+  s = socket;
 });
 
 var config = {
@@ -21,20 +23,20 @@ const getResult = index => Math.floor(Math.random() * index * 100).toString();
 
 var nrp = NRP(config);
 
-nrp.on('challangers:start', data => {
-  console.log('redis pub/sub challangers:start event recieved', data);
-    
-  Array.apply(null, { length: 3 }).forEach((e, i) => {
-    setTimeout(() => {
-        let result = getResult(i);
-        console.log('getting result', i, result);
-        nrp.emit('challangers:result', result);
-    }, 1000);
-  }); 
+nrp.on('entity:added:*', (data, channel) => {
+  console.log('redis pub/sub entity added', data, channel);
+  if (s) {
+    console.log('emitting event');
+    s.emit('entity', data);
+  }
 });
 
-nrp.on('challangers:end', data => {
-  console.log('redis pub/sub challangers:end event recieved', data);
+nrp.on('entity:removed:*', (data, channel) => {
+  console.log('redis pub/sub entity removed', data, channel);
+});
+
+nrp.on('entity:reset:*', (data, channel) => {
+  console.log('redis pub/sub entity reset', data, channel);
 });
 
 console.log(`PlayerApi socket.io listening on port ${port}`);

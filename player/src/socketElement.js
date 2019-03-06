@@ -46,6 +46,10 @@
       this.socket.on('newEvent', event => {
         console.log('new event recieved', event);
       });
+
+      this.socket.on('entity', event => {
+        console.log('entity event recieved', event);
+      })
     };
   };
 
