@@ -1,0 +1,16 @@
+{
+  "name": "player",
+  "version": "1.0.0",
+  "description": "",
+  "main": "bundle.js",
+  "dependencies": {},
+  "devDependencies": {
+    "terser": "^3.16.1"
+  },
+  "scripts": {
+    "start": "node server.js",
+    "build": "terser ./src/app/*.js -o dist/bundle.min.js --config-file terser-config.json"
+  },
+  "author": "",
+  "license": "ISC"
+}

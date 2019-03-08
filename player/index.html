@@ -1,16 +1,15 @@
 <!DOCTYPE html>
 <html>
-  <head>
-    <meta charset="UTF-8">
-    <title>Player</title>
-    <script src="http://localhost:8082/socket.io/socket.io.js"></script>
-    <script src="/src/app.js"></script>
-    <script src="/src/player.js"></script>
-    <script src="/src/socketElement.js"></script>
-    <script src="/src/attributeElement.js"></script>
-    <script src="/src/disconnectedPlayer.js"></script>
-  </head>
-  <body>
-    <custom-app id="app" num-players="2"></custom-app>
-  </body>
+
+<head>
+  <meta charset="UTF-8">
+  <title>Player</title>
+  <script src="http://localhost:8082/socket.io/socket.io.js"></script>
+  <script src="/dist/bundle.min.js"></script>
+</head>
+
+<body>
+  <custom-app id="app" num-players="2"></custom-app>
+</body>
+
 </html>

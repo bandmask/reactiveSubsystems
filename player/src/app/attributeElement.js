@@ -25,7 +25,7 @@
   class AttributeElement extends HTMLElement {
     static get observedAttributes() {
       return ['server-status'];
-    }
+    };
 
     constructor () {
       super();
@@ -44,7 +44,7 @@
       if (name === 'server-status' && (newValue && newValue !== oldValue)) {
         this.setServerStatus(newValue);
       }
-    }
+    };
 
     setServerStatus (value) {
       this.serverStatus.innerHTML = `
@@ -55,11 +55,11 @@
         this.serverStatus.classList.remove('disconnected');
         this.serverStatus.classList.add('connected');
       }
-    }
+    };
 
     getServerStatus () {
       return this.getAttribute('server-status');
-    }
+    };
   };
 
   window.customElements.define('attribute-element', AttributeElement);

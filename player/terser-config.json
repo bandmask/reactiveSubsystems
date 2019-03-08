@@ -1,0 +1,10 @@
+{
+    "mangle": {
+        "toplevel": true
+    },
+    "module": {},
+    "output": {
+        "preamble": "/* minified */"
+    },
+    "ecma": 6
+}

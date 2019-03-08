@@ -49,7 +49,7 @@
 
       this.socket.on('entity', event => {
         console.log('entity event recieved', event);
-      })
+      });
     };
   };
 

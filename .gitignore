@@ -1,5 +1,6 @@
 bin/
 obj/
+dist/
 *.Development.*
 .vscode/
 node_modules/
